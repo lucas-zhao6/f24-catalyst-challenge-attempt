@@ -1,6 +1,8 @@
 // How do I run this script? 
 // node Task1b.js    
 
+const { stdin, stdout } = require("process");
+
 todoList = []; 
 /**
  * YOUR OBJECTIVE: 
@@ -17,12 +19,18 @@ todoList = [];
  * the "// YOUR CODE HERE" comments.
  */
 
-function __todo(todoString) {
-    // YOUR CODE HERE
+function addTodo(todoString) {
+    todoList.push(todoString);
+    console.log(`To-do added: ${todoString}`);
 }
 
-function __todo() {
-    // YOUR CODE HERE
+function printTodos() {
+    console.log('');
+    console.log('Your To-dos:');
+    for (let i = 0; i < todoList.length; i++){
+    console.log(`${i + 1}. ${todoList[i]}`);
+    }
+    console.log('');
 }
 
 /**
@@ -31,7 +39,31 @@ function __todo() {
  * we do it here
  */
 function mainTask1b() {
-    // YOUR CODE HERE (simply call the functions you implemented above)
+    const readline = require('readline');
+    
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    // Function to handle the next step based on user input
+    function handleInput() {
+        rl.question('Type yes to see to-do list, or type a new to-do item to add to the list: ', (inpt) => {
+            if (inpt.toLowerCase() === "yes") {
+                printTodos(); // Print the to-do list
+                rl.close(); // Close the readline interface after printing
+            } else {
+                addTodo(inpt); // Add new to-do item
+                handleInput(); // Prompt again for further action
+            }
+        });
+    }
+
+    // Prompt user to add a to-do item
+    rl.question('Enter a to-do: ', (todoInput) => {
+        addTodo(todoInput); // Add the new to-do to the list
+        handleInput(); // Call the function to handle the next step
+    });
 }
 
 // This bit of code ensures that a main method exists! If it doesn't, then it throws an error
